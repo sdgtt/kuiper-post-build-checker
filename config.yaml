@@ -2,7 +2,7 @@
 ---
 testinfra:
   hosts:
-    - "paramiko://analog:analog@192.168.10.113"
+    - "paramiko://analog:analog@localhost"
 
 repo:
   uri:  https://github.com/analogdevicesinc/adi-kuiper-gen.git
