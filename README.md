@@ -1,15 +1,23 @@
 # sqa_post_boot_checker
 
-A post boot configuration checker using pytest-testinfra to make sure required packages, files and services are configured properly.
+A post boot configuration checker using pytest-testinfra to validate wether required packages, files and services are configured properly.
 This is work-in-progress, current supported checking:
-1. passwd file
-    * root
-    * analog
-2. bashrc file
-3. apt packages
-    * adi-kuiper-gen/stage6/01-install-packages/00-packages
-4. services
-    *  iiod
+1. Files
+    * passwd
+        * root
+        * analog
+    * bashrc
+2. apt packages
+    * stage4/00-install-packages/00-packages
+    * stage4/00-install-packages/00-packages-nr
+    * stage4/00-install-packages/01-packages
+    * stage4/00-install-packages/02-packages
+    * stage6/01-install-packages/00-packages
+3. services
+    * iiod
+    * sshd
+
+Please check config.yaml for configurations.
 
 **Installation**
 
@@ -17,42 +25,15 @@ This is work-in-progress, current supported checking:
 
 **Pre-requisites**
 
-Install pytest-testinfra
+`$pip install -r requirements.txt`
 
-`$ pip3 install pytest-testinfra`
+**Configuration**
 
-Install paramiko ( used as default backend )
+Modify config.yaml
 
-`$ pip3 install paramiko`
+**Usage**
 
-**Execution**
-
-`$pytest --hosts=root@<target_host> --sudo -v`
-
-Example
-
-`$pytest --hosts=root@192.168.10.56 --sudo -v` 
-
-(This may asks for target host authorization for a number of times. To prevent that, refer to 'Configure ssh')
-
-**Configure ssh**
-
-1. Generate Key
-
-`$ssh-keygen (This installs ssh key to default location. Specify passphrase)`
-
-2. Copy public key target host
-```
-$ssh-copy <target_host>
-ex. $ssh-copy-id 192.168.10.56
-```
-
-
-3. Use ssh-agent to prevent being ask of passphrase in each execution.
-```
-$eval `ssh-agent -s`
-$ssh-add /root/.ssh/id_rsa (specify generated ssh key)
-```
+`$cd <working_path>`
 
 
 
