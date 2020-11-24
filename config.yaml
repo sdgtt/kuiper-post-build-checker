@@ -1,0 +1,25 @@
+# This config file stores necessary test and other configuration parameters
+---
+testinfra:
+  hosts:
+    - "paramiko://analog:analog@192.168.10.113"
+
+repo:
+  uri:  https://github.com/analogdevicesinc/adi-kuiper-gen.git
+  branch: master
+
+packages:
+  paths:
+    files:
+      - stage4/00-install-packages/00-packages
+      - stage4/00-install-packages/00-packages-nr
+      - stage4/00-install-packages/01-packages
+      - stage4/00-install-packages/02-packages
+      - stage6/01-install-packages/00-packages
+
+services:
+  default:
+    - iiod
+    - sshd
+  
+
