@@ -24,8 +24,8 @@ services:
 
 devices:
   target:
-    carrier: zc706
-    daughter: fmcadc2
+    carrier: XXX
+    daughter: XXX
   profiles:
     zed:
       fmcomms2:
@@ -74,6 +74,38 @@ devices:
         iio_devices:
           - xadc
           - axi-ad9625-hpc (buffer capable)
+      cn0506_mii:
+        iio_devices:
+          - xadc
+      cn0506_rgmii:
+        iio_devices:
+          - xadc
+      ad6676evb:
+        iio_devices:
+          - xadc
+          - axi-ad6676-hpc (buffer capable)
+      ad9265_fmc:
+        iio_devices:
+          - xadc
+          - ad9517-4
+          - axi-ad9265-core-lpc (buffer capable)
+      ad9434_fmc:
+        iio_devices:
+          - xadc
+          - ad9517-4
+          - axi-ad9434-core-lpc (buffer capable)
+      ad9739a_fmc:
+        iio_devices:
+          - xadc
+          - adf4350
+          - axi-ad9739a-hpc (buffer capable)
+      dac_fmc_ebz:
+        iio_devices:
+          - xadc
+          - hmc7044
+          - axi-ad9172-hpc (buffer capable)
+
+
 
 
 
