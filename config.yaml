@@ -21,5 +21,59 @@ services:
   default:
     - iiod
     - sshd
-  
+
+devices:
+  target:
+    carrier: zc706
+    daughter: fmcadc2
+  profiles:
+    zed:
+      fmcomms2:
+        iio_devices:
+          - ad7291
+          - ad9361-phy
+          - adf4351-udc-tx-pmod
+          - adf4351-udc-rx-pmod
+          - cf-ad9361-dds-core-lpc
+          - cf-ad9361-lpc
+    zc706:
+      fmcomms2:
+        iio_devices:
+          - ad7291
+          - ad9361-phy
+          - xadc
+          - adf4351-udc-tx-pmod
+          - adf4351-udc-rx-pmod
+          - cf-ad9361-dds-core-lpc (buffer capable)
+          - cf-ad9361-lpc (buffer capable)
+      fmcomms5:
+        iio_devices:
+          - ad7291
+          - ad9361-phy
+          - ad9361-phy-B
+          - xadc
+          - cf-ad9361-dds-core-lpc (buffer capable)
+          - cf-ad9361-dds-core-B
+          - cf-ad9361-A (buffer capable)
+          - cf-ad9361-B
+      daq2:
+        iio_devices:
+          - ad7291
+          - xadc
+          - ad9523-1
+          - axi-ad9680-hpc (buffer capable)
+          - axi-ad9144-hpc (buffer capable)
+      daq3:
+        iio_devices:
+          - ad7291
+          - xadc
+          - ad9528
+          - axi-ad9680-hpc (buffer capable)
+          - axi-ad9152-hpc (buffer capable)
+      fmcadc2:
+        iio_devices:
+          - xadc
+          - axi-ad9625-hpc (buffer capable)
+
+
 

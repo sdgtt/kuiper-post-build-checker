@@ -26,9 +26,10 @@ def get_value_from_config(*args):
     with open(get_config_file()) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
         for arg in args:
-            print(arg)
-            data = data.get(arg)
-    print(data)
+            if isinstance(data, dict):
+                data = data.get(arg)
+            else:
+                data = None
     return data
 
 def get_path_from_txt(line):
@@ -112,3 +113,10 @@ def get_packages():
                     for _pkg in file_to_list(f):
                         packages.append(_pkg)
     return packages
+
+def get_device_info(carrier, daughter):
+    dev = {}
+    dev = get_value_from_config(
+            'devices', 'profiles',
+            carrier, daughter)
+    return dev
