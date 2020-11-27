@@ -47,7 +47,7 @@ def test_dmesg_sysid(host, target):
     
 @pytest.mark.parametrize("host", utils.get_host())
 def test_iio_info_device(host, target_info):
-    assert target_info.get('iio_devices')
+    assert target_info
     command = 'iio_info | grep iio:device'
     out = host.run(command)
     for target in target_info.get('iio_devices'):
