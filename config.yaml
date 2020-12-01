@@ -2,7 +2,7 @@
 ---
 testinfra:
   hosts:
-    - "paramiko://analog:analog@192.168.10.64"
+    - "paramiko://analog:analog@localhost"
 
 repo:
   uri:  https://github.com/analogdevicesinc/adi-kuiper-gen.git
@@ -24,8 +24,8 @@ services:
 
 devices:
   target:
-    carrier: zcu102
-    daughter: daq3
+    carrier: xxx
+    daughter: xxx
   profiles:
     zed:
       fmcomms2:
