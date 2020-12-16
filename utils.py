@@ -3,11 +3,47 @@ import os
 import git
 import re
 import testinfra
+import threading
+import functools
+import pytest
+import signal
+from sys import platform
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 CONFIG_FILE = 'config.yaml'
 PACKAGE_NAME = 'sqa_post_boot_checker'
 OS_GEN_REPO_NAME = 'adi-kuiper-gen'
+DEFAULT_TIMEOUT_SEC = 60
+
+def timeout(func):
+    ''' 
+        A decorator to force target function to timeout gracefully.
+        Especially useful in Windows environment when pytest-timeout s
+        triggered via signal.alarm does not work.
+
+        Modify DEFAULT_TIMEOUT_SEC to desired timeout in seconds.
+    '''
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+
+        if platform == "linux" or platform == "linux2":
+            signal_interrupt = signal.SIGINT
+        elif platform == "win32":
+            signal_interrupt = signal.CTRL_C_EVENT
+
+        timer = threading.Timer(DEFAULT_TIMEOUT_SEC, \
+            lambda: os.kill(os.getpid(), signal_interrupt))
+        timer.start()
+        try:
+            res = func(*args, **kwargs)
+        except KeyboardInterrupt:
+            print('Reached timeout executing {}'.format(func.__name__))
+            pytest.fail(msg='Timeout reached for {}'.format(func.__name__))
+        finally:
+            # if the action ends in specified time, timer is canceled
+            timer.cancel()
+        return res
+    return inner
 
 def get_package_path(file_path=None):
     if not file_path:
@@ -26,9 +62,10 @@ def get_value_from_config(*args):
     with open(get_config_file()) as f:
         data = yaml.load(f, Loader=yaml.FullLoader)
         for arg in args:
-            print(arg)
-            data = data.get(arg)
-    print(data)
+            if isinstance(data, dict):
+                data = data.get(arg)
+            else:
+                data = None
     return data
 
 def get_path_from_txt(line):
@@ -112,3 +149,10 @@ def get_packages():
                     for _pkg in file_to_list(f):
                         packages.append(_pkg)
     return packages
+
+def get_device_info(carrier, daughter):
+    dev = {}
+    dev = get_value_from_config(
+            'devices', 'profiles',
+            carrier, daughter)
+    return dev
