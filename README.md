@@ -1,4 +1,4 @@
-# sqa_post_boot_checker
+# kuiper-post-build-checker
 
 A post boot configuration checker using pytest-testinfra to validate wether required packages, files and services are configured properly.
 
