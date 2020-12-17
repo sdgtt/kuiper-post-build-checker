@@ -11,7 +11,7 @@ from sys import platform
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 CONFIG_FILE = 'config.yaml'
-PACKAGE_NAME = 'sqa_post_boot_checker'
+PACKAGE_NAME = 'kuiper-post-build-checker'
 OS_GEN_REPO_NAME = 'adi-kuiper-gen'
 DEFAULT_TIMEOUT_SEC = 60
 
