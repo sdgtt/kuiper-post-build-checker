@@ -58,3 +58,13 @@ def test_iio_info_device(host, target_info):
     out = host.run(command)
     for target in target_info.get('iio_devices'):
         assert target in out.stdout
+
+@utils.timeout
+@pytest.mark.parametrize("lib", utils.get_built_libs())
+@pytest.mark.parametrize("host", utils.get_host())
+def test_libs(host, lib):
+    command = '/usr/sbin/ldconfig -v 2> /dev/null | grep {}'.format(lib)
+    out = host.run(command)
+    assert out.rc == 0
+    assert out.stdout
+    assert not out.stderr

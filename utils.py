@@ -79,14 +79,23 @@ def get_path_from_txt(line):
         )
     return path
 
-def file_to_list(f):
+def file_to_list(f, type=None):
     entry_list = []
-    file_txt = f.read()
-    formatted = re.sub(r"\s", "\n", file_txt)
-    for ln in formatted.split("\n"):
-        # remove empty lines
-        if ln:
-            entry_list.append(ln)
+    if not type:
+        file_txt = f.read()
+        formatted = re.sub(r"\s", "\n", file_txt)
+        for ln in formatted.split("\n"):
+            # remove empty lines
+            if ln:
+                entry_list.append(ln)
+    elif type == 'libs':
+        libs = re.findall(r'build_([0-9a-zA-Z]+)\s', f.read())
+        for i,lib in enumerate(libs):
+            if re.search(r'^gr([0-9a-zA-Z]+)', lib):
+                libs[i] = re.sub(r'^gr([0-9a-zA-Z]+)',r'libgnuradio-\1',lib)
+            elif not re.search(r'^lib([0-9a-zA-Z]+)', lib):
+                libs[i] = re.sub(r'^([0-9a-zA-Z]+)',r'lib\1',lib)
+        entry_list = libs
     return entry_list
 
 def fetch_files(config=None, tree=None):
@@ -149,6 +158,20 @@ def get_packages():
                     for _pkg in file_to_list(f):
                         packages.append(_pkg)
     return packages
+
+def get_built_libs():
+    libs = []
+    # read config file
+    paths = get_value_from_config('libraries','paths')
+    for path, val in paths.items():
+        if path == 'files':
+            for line in val:
+                _file_path = get_path_from_txt(line)
+                #TODO kimpaller: catch and report test as fail incase file cannot be found.
+                with open(_file_path) as f:
+                    for _lib in file_to_list(f, 'libs'):
+                        libs.append(_lib)
+    return libs
 
 def get_device_info(carrier, daughter):
     dev = {}
