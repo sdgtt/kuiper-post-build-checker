@@ -20,7 +20,7 @@ def target():
     target = utils.get_value_from_config('devices', 'target')
     return target
 
-@utils.timeout
+@utils.timeout()
 @pytest.mark.parametrize("host", utils.get_host())
 def test_dmesg_error(host):
     command = 'dmesg | grep error'
@@ -29,7 +29,7 @@ def test_dmesg_error(host):
     assert not out.stdout
     assert not out.stderr
 
-@utils.timeout
+@utils.timeout()
 @pytest.mark.parametrize("host", utils.get_host())
 def test_dmesg_sysid(host, target):
 
@@ -50,7 +50,7 @@ def test_dmesg_sysid(host, target):
     assert is_daughter_match(out.stdout, target.get('daughter'))
     assert is_git_clean(out.stdout)
 
-@utils.timeout
+@utils.timeout()
 @pytest.mark.parametrize("host", utils.get_host())
 def test_iio_info_device(host, target_info):
     assert target_info
@@ -59,7 +59,7 @@ def test_iio_info_device(host, target_info):
     for target in target_info.get('iio_devices'):
         assert target in out.stdout
 
-@utils.timeout
+@utils.timeout()
 @pytest.mark.parametrize("lib", utils.get_built_libs())
 @pytest.mark.parametrize("host", utils.get_host())
 def test_libs(host, lib):

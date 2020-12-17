@@ -15,35 +15,37 @@ PACKAGE_NAME = 'sqa_post_boot_checker'
 OS_GEN_REPO_NAME = 'adi-kuiper-gen'
 DEFAULT_TIMEOUT_SEC = 60
 
-def timeout(func):
+def timeout(time=DEFAULT_TIMEOUT_SEC):
     ''' 
         A decorator to force target function to timeout gracefully.
         Especially useful in Windows environment when pytest-timeout s
         triggered via signal.alarm does not work.
 
-        Modify DEFAULT_TIMEOUT_SEC to desired timeout in seconds.
+        If not specified, timeout will be set to DEFAULT_TIMEOUT_SEC
     '''
-    @functools.wraps(func)
-    def inner(*args, **kwargs):
+    def timeout_wrapper(func):
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
 
-        if platform == "linux" or platform == "linux2":
-            signal_interrupt = signal.SIGINT
-        elif platform == "win32":
-            signal_interrupt = signal.CTRL_C_EVENT
+            if platform == "linux" or platform == "linux2":
+                signal_interrupt = signal.SIGINT
+            elif platform == "win32":
+                signal_interrupt = signal.CTRL_C_EVENT
 
-        timer = threading.Timer(DEFAULT_TIMEOUT_SEC, \
-            lambda: os.kill(os.getpid(), signal_interrupt))
-        timer.start()
-        try:
-            res = func(*args, **kwargs)
-        except KeyboardInterrupt:
-            print('Reached timeout executing {}'.format(func.__name__))
-            pytest.fail(msg='Timeout reached for {}'.format(func.__name__))
-        finally:
-            # if the action ends in specified time, timer is canceled
-            timer.cancel()
-        return res
-    return inner
+            timer = threading.Timer(time, \
+                lambda: os.kill(os.getpid(), signal_interrupt))
+            timer.start()
+            try:
+                res = func(*args, **kwargs)
+            except KeyboardInterrupt:
+                print('Reached timeout executing {}'.format(func.__name__))
+                pytest.fail(msg='Timeout reached for {}'.format(func.__name__))
+            finally:
+                # if the action ends in specified time, timer is canceled
+                timer.cancel()
+            return res
+        return inner
+    return timeout_wrapper
 
 def get_package_path(file_path=None):
     if not file_path:
