@@ -15,6 +15,7 @@ packages:
       - stage4/00-install-packages/00-packages-nr
       - stage4/00-install-packages/01-packages
       - stage4/00-install-packages/02-packages
+      - stage5/00-install-extras/00-packages
       - stage6/01-install-packages/00-packages
 
 services:
@@ -164,7 +165,6 @@ devices:
           - cf-ad9361-dds-core-B
           - cf-ad9361-A (buffer capable)
           - cf-ad9361-B
-    zcu102:
 
 
 
