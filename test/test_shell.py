@@ -1,7 +1,7 @@
 import pytest
-from sqa_post_boot_checker import utils
 import re
 import time
+import utils
 
 import functools
 

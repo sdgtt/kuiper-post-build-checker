@@ -1,5 +1,5 @@
 import pytest
-from sqa_post_boot_checker import utils
+import utils
 
 @pytest.mark.parametrize("host", utils.get_host())
 def test_passwd_file(host):
