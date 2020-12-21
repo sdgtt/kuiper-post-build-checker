@@ -145,6 +145,15 @@ devices:
           - ad9517-1
           - axi-ad9250-hpc-0 (buffer capable)
           - axi-ad9250-hpc-1 (buffer capable)
+      fmcomms11:
+        iio_devices:
+          - ad7291
+          - xadc
+          - adl5240
+          - hmc1119
+          - adf4355
+          - axi-ad9625-hpc (buffer capable)
+          - axi-ad9162-hpc (buffer capable)
     zc702:
       adv7511:
         iio_devices:
