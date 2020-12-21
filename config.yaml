@@ -27,6 +27,9 @@ libraries:
   paths:
     files:
       - stage6/04-gnuradio-m2k/00-run.sh
+  default:
+    - libiio
+    - libosc
 
 devices:
   target:
