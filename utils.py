@@ -180,6 +180,16 @@ def get_built_libs():
                     libs.append(_lib)
     return libs
 
+def get_commands():
+    commands = []
+    _commands = get_value_from_config('commands')
+    for cat, cat_data in _commands.items():                 
+        if cat =='default':
+            if isinstance(cat_data,list):
+                for _c in cat_data:
+                    commands.append(_c)
+    return commands
+
 def get_device_info(carrier, daughter):
     dev = {}
     dev = get_value_from_config(

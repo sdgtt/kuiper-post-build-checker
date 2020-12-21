@@ -23,6 +23,11 @@ services:
     - iiod
     - sshd
 
+commands:
+  default:
+    - iio_info
+    - osc
+
 libraries:
   paths:
     files:

@@ -68,3 +68,10 @@ def test_libs(host, lib):
     assert out.rc == 0
     assert out.stdout
     assert not out.stderr
+
+@utils.timeout()
+@pytest.mark.parametrize("command", utils.get_commands())
+@pytest.mark.parametrize("host", utils.get_host())
+def test_commands(host, command):
+    out = host.exists(command)
+    assert out
