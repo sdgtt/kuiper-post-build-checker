@@ -27,6 +27,8 @@ commands:
   default:
     - iio_info
     - osc
+    - gnuradio-companion
+    - scopy
 
 libraries:
   paths:
