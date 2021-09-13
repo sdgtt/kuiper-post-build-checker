@@ -14,10 +14,12 @@ def fetchkuipergen(c, tree=None):
 @task(iterable=['files'],
     help={
             "files": "Set to test only files specified.",
-            "tree" : "Checkout to particular tree(branch or commit)"
+            "tree" : "Checkout to particular tree(branch or commit)",
+            "host" : "Target using format <backend>://<credentials>@<ip>",
+            "ip" : "IP of DUT, will assume paramiko backend"
         },
     )
-def test(c, files=None, tree=None):
+def test(c, files=None, tree=None, host=None, ip=None):
     """ Run pytest tests """
 
     # update adi kuiper gen repo
@@ -25,9 +27,19 @@ def test(c, files=None, tree=None):
 
     # build command based on parameters
     target = ''
+    dut_host_cmd = ''
+    dut_ip_cmd = ''
+
     for _file in files:
         _file = os.path.join('test', _file)
         print(_file)
         target = target + ' {}'.format(_file)
-    print('Executing ... python -m pytest -v {}'.format(target))
-    c.run('python -m pytest -v {}'.format(target))
+
+    if host:
+        dut_host_cmd = ' --host={}'.format(host)
+    
+    if ip:
+        dut_ip_cmd = ' --ip={}'.format(ip)
+
+    print('Executing ... python -m pytest -v {}'.format(target, dut_host_cmd, dut_ip_cmd))
+    c.run('python -m pytest -v {} {} {}'.format(target, dut_host_cmd, dut_ip_cmd))

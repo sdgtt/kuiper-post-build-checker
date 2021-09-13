@@ -132,14 +132,17 @@ def fetch_files(config=None, tree=None):
             status = g.checkout(tree)
             print("Checkout to {}".format(tree))
 
-def get_host():
-    hosts = []
-    #get hosts from config file
-    _hosts = get_value_from_config('testinfra','hosts')
-    for _host in _hosts:
-        host = testinfra.get_host(_host)
-        hosts.append(host)
-    return hosts
+def get_host(backend='paramiko',username='analog', password='analog',host=None, ip=None):
+    if host:
+        _host = host
+    else:
+        if ip:
+            _host = '{}://{}:{}@{}'.format(backend,username, password, ip)
+        else:
+            #get hosts from config file
+            _host = get_value_from_config('testinfra','host')
+
+    return testinfra.get_host(_host)
 
 def get_services():
     services = []
