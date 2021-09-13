@@ -19,7 +19,7 @@ def fetchkuipergen(c, tree=None):
             "ip" : "IP of DUT, will assume paramiko backend"
         },
     )
-def test(c, files=None, tree=None, host=None, ip=None):
+def test(c, files=None, tree=None, host=None, ip=None, hardware_less=True):
     """ Run pytest tests """
 
     # update adi kuiper gen repo
@@ -27,8 +27,7 @@ def test(c, files=None, tree=None, host=None, ip=None):
 
     # build command based on parameters
     target = ''
-    dut_host_cmd = ''
-    dut_ip_cmd = ''
+    options = ''
 
     for _file in files:
         _file = os.path.join('test', _file)
@@ -36,10 +35,14 @@ def test(c, files=None, tree=None, host=None, ip=None):
         target = target + ' {}'.format(_file)
 
     if host:
-        dut_host_cmd = ' --host={}'.format(host)
+        options = options + ' --host={}'.format(host)
     
     if ip:
-        dut_ip_cmd = ' --ip={}'.format(ip)
+        options = options + ' --ip={}'.format(ip)
 
-    print('Executing ... python -m pytest -v {}'.format(target, dut_host_cmd, dut_ip_cmd))
-    c.run('python -m pytest -v {} {} {}'.format(target, dut_host_cmd, dut_ip_cmd))
+    if hardware_less:
+        options = options + ' -m "not hardware_check"'
+
+
+    print('Executing ... python -m pytest -v {} {}'.format(target, options))
+    c.run('python -m pytest -v {} {}'.format(target, options))

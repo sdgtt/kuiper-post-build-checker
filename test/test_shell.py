@@ -20,6 +20,7 @@ def target():
     target = utils.get_value_from_config('devices', 'target')
     return target
 
+@pytest.mark.hardware_check
 @utils.timeout()
 def test_dmesg_error(host):
     command = 'dmesg | grep error'
@@ -28,6 +29,7 @@ def test_dmesg_error(host):
     assert not out.stdout
     assert not out.stderr
 
+@pytest.mark.hardware_check
 @utils.timeout()
 def test_dmesg_sysid(host, target):
 
@@ -48,6 +50,7 @@ def test_dmesg_sysid(host, target):
     assert is_daughter_match(out.stdout, target.get('daughter'))
     assert is_git_clean(out.stdout)
 
+@pytest.mark.hardware_check
 @utils.timeout()
 def test_iio_info_device(host, target_info):
     assert target_info
