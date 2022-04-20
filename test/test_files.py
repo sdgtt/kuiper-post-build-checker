@@ -3,20 +3,26 @@ import utils
 import json
 import pytest_check as check
 
+DESRIPTOR_FILE="/boot/kuiper.json"
+# DESRIPTOR_FILE="/boot/projects_descriptor.json"
+
 def get_boot_files(host):
     boot_files = []
-    project_descriptor = host.file("/boot/projects_descriptor.json")
+    project_descriptor = host.file(DESRIPTOR_FILE)
     assert project_descriptor.exists
     if project_descriptor.exists:
-        cmd = host.run("cat /boot/projects_descriptor.json")
+        cmd = host.run("cat {}".format(DESRIPTOR_FILE))
         assert cmd.rc == 0
         if cmd.rc == 0:
             descriptor_dict = json.loads(cmd.stdout)
             projects = descriptor_dict['projects']
             for project in projects:
+                # if not project['kernel'] in [ bt[1] for bt in boot_files]:
+                    # boot_files.append((project['name'],project['kernel']))
+                boot_files.append((project['name'],project['kernel']))
+                if "preloader" in project:
+                    boot_files.append((project['name'],project['preloader']))
                 files = project['files']
-                if not project['kernel'] in [ bt[1] for bt in boot_files]:
-                    boot_files.append(('Common',project['kernel']))
                 for f in files:
                     boot_files.append((project['name'],f['path']))
     return boot_files
