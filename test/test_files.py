@@ -6,12 +6,12 @@ import pytest_check as check
 DESRIPTOR_FILE="/boot/kuiper.json"
 # DESRIPTOR_FILE="/boot/projects_descriptor.json"
 
-def get_boot_files(host):
-    boot_files = []
-    project_descriptor = host.file(DESRIPTOR_FILE)
+def get_boot_files(host, descriptor=DESRIPTOR_FILE):
+    boot_files = []    
+    project_descriptor = host.file(descriptor)
     assert project_descriptor.exists
     if project_descriptor.exists:
-        cmd = host.run("cat {}".format(DESRIPTOR_FILE))
+        cmd = host.run("cat {}".format(descriptor))
         assert cmd.rc == 0
         if cmd.rc == 0:
             descriptor_dict = json.loads(cmd.stdout)
