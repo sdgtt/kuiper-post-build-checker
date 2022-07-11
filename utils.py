@@ -8,6 +8,7 @@ import functools
 import pytest
 import signal
 from sys import platform
+from artifactory import ArtifactoryPath
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 CONFIG_FILE = 'config.yaml'
@@ -199,3 +200,10 @@ def get_device_info(carrier, daughter):
             'devices', 'profiles',
             carrier, daughter)
     return dev
+
+def get_artifactory_boot_files(artifactory_path):
+    # path = ArtifactoryPath("https://<artifactory_server>/<path to parent folder>")
+    path = ArtifactoryPath(artifactory_path)
+    builds = [ p for p in path.glob("*")]
+    latest_path = ArtifactoryPath(builds[-1])
+    return [ f for f in latest_path.rglob("*") ]
