@@ -55,6 +55,8 @@ def test_boot_files(host):
     bts = get_boot_files(host)
     for bt in bts:
         condition = host.file(bt[1]).exists
+        if condition:
+            print(f'{bt} found')
         message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
         check.is_true(condition, message)
 
