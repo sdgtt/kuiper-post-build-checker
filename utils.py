@@ -206,4 +206,8 @@ def get_artifactory_boot_files(artifactory_path):
     path = ArtifactoryPath(artifactory_path)
     builds = [ p for p in path.glob("*")]
     latest_path = ArtifactoryPath(builds[-1])
-    return [ f for f in latest_path.rglob("*") ]
+    latest_path_files = list()
+    for f in latest_path.rglob("*"):
+        print(f"Detected {f}")
+        latest_path_files.append(f)
+    return latest_path_files

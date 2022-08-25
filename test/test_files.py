@@ -60,6 +60,7 @@ def test_boot_files(host):
         message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
         check.is_true(condition, message)
 
+@pytest.mark.artifactory_check
 def test_artifactory_boot_files(artifactory_bts):
     if artifactory_bts:
         normalized_abts = list()

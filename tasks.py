@@ -19,7 +19,15 @@ def fetchkuipergen(c, tree=None):
             "ip" : "IP of DUT, will assume paramiko backend"
         },
     )
-def test(c, files=None, tree=None, host=None, ip=None, hardware_less=True):
+def test(
+        c,
+        files=None,
+        tree=None,
+        host=None,
+        ip=None,
+        hardware_less=True,
+        artifactory_target=None
+    ):
     """ Run pytest tests """
 
     # update adi kuiper gen repo
@@ -43,6 +51,9 @@ def test(c, files=None, tree=None, host=None, ip=None, hardware_less=True):
     if hardware_less:
         options = options + ' -m "not hardware_check"'
 
+    if artifactory_target:
+        options = options + ' -m "artifactory_check" --artifactory_target={}'\
+            .format(artifactory_target)
 
-    print('Executing ... python -m pytest -v {} {}'.format(target, options))
-    c.run('python -m pytest -v {} {}'.format(target, options))
+    print('Executing ... python3 -m pytest -vss {} {}'.format(target, options))
+    c.run('python3 -m pytest -vss {} {}'.format(target, options))
