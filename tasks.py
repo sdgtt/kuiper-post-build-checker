@@ -55,5 +55,7 @@ def test(
         options = options + ' -m "artifactory_check" --artifactory_target={}'\
             .format(artifactory_target)
 
-    print('Executing ... python3 -m pytest -vss {} {}'.format(target, options))
-    c.run('python3 -m pytest -vss {} {}'.format(target, options))
+    cmd = 'python3 -m pytest -vsss {} {}'.format(target, options)
+
+    print(f'Executing {cmd}')
+    c.run(cmd)
