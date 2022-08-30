@@ -78,7 +78,7 @@ def test_artifactory_boot_files(artifactory_bts):
         bts = get_boot_files(host=None, descriptor=str(descriptor))
         print(bts)
         for bt in bts:
-            condition = (bt in normalized_abts)
+            condition = (bt[1] in normalized_abts)
             message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
             check.is_true(condition, message)
     else:
