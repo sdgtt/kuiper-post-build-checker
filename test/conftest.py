@@ -22,6 +22,13 @@ def pytest_addoption(parser):
         default=None,
         help="Absolute path of target folder containing boot files"
     )
+
+    parser.addoption(
+        "--board",
+        action="store",
+        default=None,
+        help="Common project name of the board. ex: socfpga_arria10_socdk_daq2"
+    )
     
 @pytest.fixture
 def host(request):
@@ -40,3 +47,10 @@ def artifactory_bts(request):
         return utils.get_artifactory_boot_files(artifactory_path=artifactory_target)
 
     return None
+
+@pytest.fixture
+def project_name(request):
+    # if host is given, ip and config will be ignored
+    # if ip is given, will default to paramiko backend and config will be ignore
+    # if host and ip is not given, config will be used
+    return request.config.getoption("--board")
