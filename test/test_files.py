@@ -199,17 +199,24 @@ def test_bashrc_file(host):
     assert passwd.contains("PYTHONPATH")
 
 def test_boot_files(host, project_name):
+    fail_flag = False
     bts = get_boot_files(host, DESRIPTOR_FILE, project_name)
     for bt in bts:
         condition = host.file(bt[1]).exists
-        if condition:
-            print(f'{bt} found')
         message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
         check.is_true(condition, message)
+        if condition:
+            print(f'Found {bt}')
+        else:
+            fail_flag = True
+
+    assert not fail_flag
 
 @pytest.mark.artifactory_check
 def test_artifactory_boot_files(artifactory_bts):
+    assert artifactory_bts
     if artifactory_bts:
+        fail_flag = False
         normalized_abts = list()
         descriptor = None
         base_path = os.path.commonpath(artifactory_bts).replace(":/","://")
@@ -225,6 +232,10 @@ def test_artifactory_boot_files(artifactory_bts):
             condition = (bt[1] in normalized_abts)
             message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
             check.is_true(condition, message)
-    else:
-        print("Empty artifactory_bts")
+            if condition:
+                print(f'Found {bt}')
+            else:
+                fail_flag = True
+
+        assert not fail_flag
 
