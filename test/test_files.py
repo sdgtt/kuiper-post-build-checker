@@ -220,6 +220,7 @@ def test_artifactory_boot_files(artifactory_bts):
         normalized_abts = list()
         descriptor = None
         base_path = os.path.commonpath(artifactory_bts).replace(":/","://")
+
         print(f"base_path: {base_path} ")
         # find descriptor
         for abt in artifactory_bts:
@@ -227,13 +228,27 @@ def test_artifactory_boot_files(artifactory_bts):
             if nbt == DESRIPTOR_FILE:
                 descriptor = abt
             normalized_abts.append(nbt)
+        #get boot files from descriptor
         bts = get_boot_files(host=None, descriptor=str(descriptor))
+
+        # check for missing files based from the descriptor
         for bt in bts:
             condition = (bt[1] in normalized_abts)
             message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
             check.is_true(condition, message)
             if condition:
                 print(f'Found {bt}')
+            else:
+                fail_flag = True
+
+        # check for unexpected files not defined on the descriptor
+        bts_from_descriptor = [ bt[1] for bt in bts ]
+        for nbt in normalized_abts:
+            condition = (nbt in bts_from_descriptor)
+            message = 'Undefined file: {}'.format(nbt)
+            check.is_true(condition, message)
+            if condition:
+                print(f'Found {nbt}')
             else:
                 fail_flag = True
 
