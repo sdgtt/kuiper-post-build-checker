@@ -8,6 +8,7 @@ import re
 from functools import partial
 
 DESRIPTOR_FILE="/boot/kuiper.json"
+DEFAULT_FILES = ["/boot/README.txt", "/boot/VERSION.txt", "/boot/kuiper.json", "/boot/uEnv.txt"]
 # DESRIPTOR_FILE="/boot/projects_descriptor.json"
 
 def get_project_details(pcn):
@@ -249,6 +250,16 @@ def test_artifactory_boot_files(artifactory_bts):
             check.is_true(condition, message)
             if condition:
                 print(f'Found {nbt}')
+            else:
+                fail_flag = True
+
+        # check for missing default files
+        for file in DEFAULT_FILES:
+            condition = (file in normalized_abts)
+            message = 'Missing default file: {}'.format(file)
+            check.is_true(condition, message)
+            if condition:
+                print(f'Found {file}')
             else:
                 fail_flag = True
 
