@@ -31,7 +31,7 @@ def test(
     """ Run pytest tests """
 
     # update adi kuiper gen repo
-    utils.fetch_files(tree=tree)
+    # utils.fetch_files(tree=tree)
 
     # build command based on parameters
     target = ''
