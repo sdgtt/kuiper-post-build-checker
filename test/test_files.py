@@ -8,6 +8,7 @@ import re
 from functools import partial
 
 DESRIPTOR_FILE="/boot/kuiper.json"
+DEFAULT_FILES = ["/boot/README.txt", "/boot/VERSION.txt", "/boot/kuiper.json", "/boot/uEnv.txt"]
 # DESRIPTOR_FILE="/boot/projects_descriptor.json"
 
 def get_project_details(pcn):
@@ -201,12 +202,35 @@ def test_bashrc_file(host):
 def test_boot_files(host, project_name):
     fail_flag = False
     bts = get_boot_files(host, DESRIPTOR_FILE, project_name)
+    # check for missing files based from the descriptor
     for bt in bts:
         condition = host.file(bt[1]).exists
         message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
         check.is_true(condition, message)
         if condition:
             print(f'Found {bt}')
+        else:
+            fail_flag = True
+    
+    # check for unexpected files not defined on the descriptor
+    actual_files = host.run("find /boot -type f -not -name *.dtbo").stdout.split()
+    bts_from_descriptor = [ bt[1] for bt in bts ]
+    for af in actual_files:
+        condition = (af in bts_from_descriptor)
+        message = 'Undefined file: {}'.format(af)
+        check.is_true(condition, message)
+        if condition:
+            print(f'Found {af}')
+        else:
+            fail_flag = True
+
+    # check for missing default files
+    for file in DEFAULT_FILES:
+        condition = (file in actual_files)
+        message = 'Missing default file: {}'.format(file)
+        check.is_true(condition, message)
+        if condition:
+            print(f'Found {file}')
         else:
             fail_flag = True
 
@@ -249,6 +273,16 @@ def test_artifactory_boot_files(artifactory_bts):
             check.is_true(condition, message)
             if condition:
                 print(f'Found {nbt}')
+            else:
+                fail_flag = True
+
+        # check for missing default files
+        for file in DEFAULT_FILES:
+            condition = (file in normalized_abts)
+            message = 'Missing default file: {}'.format(file)
+            check.is_true(condition, message)
+            if condition:
+                print(f'Found {file}')
             else:
                 fail_flag = True
 
