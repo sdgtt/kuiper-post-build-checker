@@ -19,8 +19,13 @@ packages:
 
 services:
   default:
-    # - iiod
     - sshd
+    - accounts-daemon
+    - avahi-daemon
+    - nvargus-daemon
+    - nvphs
+    - rtkit-daemon
+    - x11vnc
 
 commands:
   default:
