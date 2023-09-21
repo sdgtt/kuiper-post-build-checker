@@ -8,14 +8,27 @@ repo:
   branch: master
 
 packages:
-  paths:
-    files:
-      - stage4/00-install-packages/00-packages
-      - stage4/00-install-packages/00-packages-nr
-      - stage4/00-install-packages/01-packages
-      - stage4/00-install-packages/02-packages
-      - stage5/00-install-extras/00-packages
-      - stage6/01-install-packages/00-packages
+  default:
+  # - libopencv-contrib-dev
+  # - libglfw3-dev
+  # - tigervnc-standalone-server
+  - vim
+  - cmake
+  - make   
+  - libgtk2.0-dev
+  - pkg-config
+  - libavcodec-dev
+  - libavformat-dev
+  - libswscale-dev
+  - libgl1-mesa-dev
+  - libgl1
+  - libssl-dev 
+  - libopencv-dev
+  - libopencv-contrib3.2
+  - python3-pip
+  - python3-tk
+  - python3-dev 
+  - openbox
 
 services:
   default:
