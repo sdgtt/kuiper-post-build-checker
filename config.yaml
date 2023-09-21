@@ -1,8 +1,7 @@
 # This config file stores necessary test and other configuration parameters
 ---
 testinfra:
-  hosts:
-    - "paramiko://analog:analog@localhost"
+  host: "paramiko://analog:analog@localhost"
 
 repo:
   uri:  https://github.com/analogdevicesinc/adi-kuiper-gen.git

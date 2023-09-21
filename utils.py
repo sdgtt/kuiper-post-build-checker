@@ -8,6 +8,7 @@ import functools
 import pytest
 import signal
 from sys import platform
+from artifactory import ArtifactoryPath
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 CONFIG_FILE = 'config.yaml'
@@ -132,14 +133,17 @@ def fetch_files(config=None, tree=None):
             status = g.checkout(tree)
             print("Checkout to {}".format(tree))
 
-def get_host():
-    hosts = []
-    #get hosts from config file
-    _hosts = get_value_from_config('testinfra','hosts')
-    for _host in _hosts:
-        host = testinfra.get_host(_host)
-        hosts.append(host)
-    return hosts
+def get_host(backend='paramiko',username='analog', password='analog',host=None, ip=None):
+    if host:
+        _host = host
+    else:
+        if ip:
+            _host = '{}://{}:{}@{}'.format(backend,username, password, ip)
+        else:
+            #get hosts from config file
+            _host = get_value_from_config('testinfra','host')
+
+    return testinfra.get_host(_host)
 
 def get_services():
     services = []
@@ -196,3 +200,14 @@ def get_device_info(carrier, daughter):
             'devices', 'profiles',
             carrier, daughter)
     return dev
+
+def get_artifactory_boot_files(artifactory_path):
+    # path = ArtifactoryPath("https://<artifactory_server>/<path to parent folder>")
+    path = ArtifactoryPath(artifactory_path)
+    builds = [ p for p in path.glob("*")]
+    latest_path = ArtifactoryPath(builds[-1])
+    latest_path_files = list()
+    for f in latest_path.rglob("*"):
+        print(f"Detected {f}")
+        latest_path_files.append(f)
+    return latest_path_files
