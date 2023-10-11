@@ -12,23 +12,16 @@ packages:
   # - libopencv-contrib-dev
   # - libglfw3-dev
   # - tigervnc-standalone-server
-  - vim
-  - cmake
-  - make   
-  - libgtk2.0-dev
-  - pkg-config
-  - libavcodec-dev
-  - libavformat-dev
-  - libswscale-dev
-  - libgl1-mesa-dev
-  - libgl1
-  - libssl-dev 
+  - libv4l-0
   - libopencv-dev
-  - libopencv-contrib3.2
+  - cmake
+  # - glog
+  # - libwebsockets-dev
+  - protobuf-compiler
   - python3-pip
   - python3-tk
-  - python3-dev 
-  - openbox
+  - python3-dev
+  - libvncserver1
 
 services:
   default:
