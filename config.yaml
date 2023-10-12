@@ -15,8 +15,9 @@ packages:
   - libv4l-0
   - libopencv-dev
   - cmake
-  # - glog
-  # - libwebsockets-dev
+  - glog
+  - libwebsockets-dev
+  - protobuf
   - protobuf-compiler
   - python3-pip
   - python3-tk
