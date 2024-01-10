@@ -44,159 +44,51 @@ commands:
 libraries:
   paths:
     files:
-      - stage6/04-gnuradio-m2k/00-run.sh
   default:
-    - libiio
-    - libosc
+    - /opt/glog
+    # - /opt/glog/include
+    # - /opt/glog/include/glog
+    # - /opt/glog/lib
+    # - /opt/glog/lib/cmake
+    # - /opt/glog/lib/cmake/glog
+    - /opt/protobuf
+    # - /opt/protobuf/bin
+    # - /opt/protobuf/include
+    # - /opt/protobuf/include/google
+    # - /opt/protobuf/include/google/protobuf
+    # - /opt/protobuf/include/google/protobuf/compiler
+    # - /opt/protobuf/include/google/protobuf/compiler/cpp
+    # - /opt/protobuf/include/google/protobuf/compiler/csharp
+    # - /opt/protobuf/include/google/protobuf/compiler/java
+    # - /opt/protobuf/include/google/protobuf/compiler/js
+    # - /opt/protobuf/include/google/protobuf/compiler/objectivec
+    # - /opt/protobuf/include/google/protobuf/compiler/php
+    # - /opt/protobuf/include/google/protobuf/compiler/python
+    # - /opt/protobuf/include/google/protobuf/compiler/ruby
+    # - /opt/protobuf/include/google/protobuf/io
+    # - /opt/protobuf/include/google/protobuf/stubs
+    # - /opt/protobuf/include/google/protobuf/util
+    # - /opt/protobuf/lib
+    # - /opt/protobuf/lib/cmake
+    # - /opt/protobuf/lib/cmake/protobuf
+    # - /opt/protobuf/lib/pkgconfig
+    - /opt/websockets
+    # - /opt/websockets/bin
+    # - /opt/websockets/include
+    # - /opt/websockets/include/libwebsockets
+    # - /opt/websockets/include/libwebsockets/abstract
+    # - /opt/websockets/include/libwebsockets/abstract/protocols
+    # - /opt/websockets/include/libwebsockets/abstract/transports
+    # - /opt/websockets/lib
+    # - /opt/websockets/lib/cmake
+    # - /opt/websockets/lib/cmake/libwebsockets
+    # - /opt/websockets/lib/pkgconfig
+    # - /opt/websockets/share
+    # - /opt/websockets/share/libwebsockets-test-server
+    # - /opt/websockets/share/libwebsockets-test-server/private
 
 devices:
-  target:
-    carrier: xxx
-    daughter: xxx
-  profiles:
-    zed:
-      fmcomms2:
-        iio_devices:
-          - ad7291
-          - ad9361-phy
-          - adf4351-udc-tx-pmod
-          - adf4351-udc-rx-pmod
-          - cf-ad9361-dds-core-lpc
-          - cf-ad9361-lpc
-      ad9467_fmc:
-        iio_devices:
-          - xadc
-          - ad9517-4
-          - cf-ad9467-core-lpc (buffer capable)
-      adv7511:
-        iio_devices:
-          - xadc
-    zc706:
-      fmcomms2:
-        iio_devices:
-          - ad7291
-          - ad9361-phy
-          - xadc
-          - adf4351-udc-tx-pmod
-          - adf4351-udc-rx-pmod
-          - cf-ad9361-dds-core-lpc (buffer capable)
-          - cf-ad9361-lpc (buffer capable)
-      fmcomms5:
-        iio_devices:
-          - ad7291
-          - ad9361-phy
-          - ad9361-phy-B
-          - xadc
-          - cf-ad9361-dds-core-lpc (buffer capable)
-          - cf-ad9361-dds-core-B
-          - cf-ad9361-A (buffer capable)
-          - cf-ad9361-B
-      daq2:
-        iio_devices:
-          - ad7291
-          - xadc
-          - ad9523-1
-          - axi-ad9680-hpc (buffer capable)
-          - axi-ad9144-hpc (buffer capable)
-      daq3:
-        iio_devices:
-          - ad7291
-          - xadc
-          - ad9528
-          - axi-ad9680-hpc (buffer capable)
-          - axi-ad9152-hpc (buffer capable)
-      fmcadc2:
-        iio_devices:
-          - xadc
-          - axi-ad9625-hpc (buffer capable)
-      fmcadc3:
-        iio_devices:
-          - xadc
-          - ada4961
-          - axi-ad9625-hpc (buffer capable)
-      cn0506_mii:
-        iio_devices:
-          - xadc
-      cn0506_rgmii:
-        iio_devices:
-          - xadc
-      ad6676evb:
-        iio_devices:
-          - xadc
-          - axi-ad6676-hpc (buffer capable)
-      ad9265_fmc:
-        iio_devices:
-          - xadc
-          - ad9517-4
-          - axi-ad9265-core-lpc (buffer capable)
-      ad9434_fmc:
-        iio_devices:
-          - xadc
-          - ad9517-4
-          - axi-ad9434-core-lpc (buffer capable)
-      ad9739a_fmc:
-        iio_devices:
-          - xadc
-          - adf4350
-          - axi-ad9739a-hpc (buffer capable)
-      dac_fmc_ebz:
-        iio_devices:
-          - xadc
-          - hmc7044
-          - axi-ad9172-hpc (buffer capable)
-      adrv9009:
-        iio_devices:
-          - ad7291
-          - xadc
-          - ad9528-1
-          - adrv9009-phy
-          - axi-adrv9009-rx-obs-hpc (buffer capable)
-          - axi-adrv9009-tx-hpc (buffer capable)
-          - axi-adrv9009-rx-hpc (buffer capable)
-      adv7511:
-        iio_devices:
-          - xadc
-      fmcjesdadc1:
-        iio_devices:
-          - ad7291
-          - xadc
-          - ad9517-1
-          - axi-ad9250-hpc-0 (buffer capable)
-          - axi-ad9250-hpc-1 (buffer capable)
-      fmcomms11:
-        iio_devices:
-          - ad7291
-          - xadc
-          - adl5240
-          - hmc1119
-          - adf4355
-          - axi-ad9625-hpc (buffer capable)
-          - axi-ad9162-hpc (buffer capable)
-    zc702:
-      adv7511:
-        iio_devices:
-          - xadc
-      fmcomms2:
-        iio_devices:
-          - ad7291
-          - ad9361-phy
-          - xadc
-          - adf4351-udc-tx-pmod
-          - adf4351-udc-rx-pmod
-          - cf-ad9361-dds-core-lpc (buffer capable)
-          - cf-ad9361-lpc (buffer capable)
-      fmcomms5:
-        iio_devices:
-          - ad7291
-          - ad9361-phy
-          - ad9361-phy-B
-          - xadc
-          - cf-ad9361-dds-core-lpc (buffer capable)
-          - cf-ad9361-dds-core-B
-          - cf-ad9361-A (buffer capable)
-          - cf-ad9361-B
-
-
-
-
-
+  default:
+    - video0
+    - video1
+  
