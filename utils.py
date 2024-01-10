@@ -151,6 +151,12 @@ def get_services():
     services = get_value_from_config('services','default')
     return services
 
+def get_devices():
+    devices = []
+    # get services from config file
+    devices = get_value_from_config('devices','default')
+    return devices
+
 def get_packages(get_mode = 'paths'):
     packages = []
     # read config file
@@ -168,7 +174,7 @@ def get_packages(get_mode = 'paths'):
         packages = paths
     return packages
 
-def get_built_libs():
+def get_built_libs(get_mode = 'default'):
     libs = []
     libraries = get_value_from_config('libraries')
     for cat, cat_data in libraries.items():
@@ -180,7 +186,7 @@ def get_built_libs():
                     #TODO kimpaller: catch and report test as fail incase file cannot be found.
                     with open(_file_path) as f:
                         for _lib in file_to_list(f, 'libs'):
-                            libs.append(_lib)                    
+                            libs.append(_lib)         
         if cat =='default':
             if isinstance(cat_data,list):
                 for _lib in cat_data:
