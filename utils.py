@@ -151,18 +151,21 @@ def get_services():
     services = get_value_from_config('services','default')
     return services
 
-def get_packages():
+def get_packages(get_mode = 'paths'):
     packages = []
     # read config file
-    paths = get_value_from_config('packages','paths')
-    for path, val in paths.items():
-        if path == 'files':
-            for line in val:
-                _file_path = get_path_from_txt(line)
-                #TODO kimpaller: catch and report test as fail incase file cannot be found.
-                with open(_file_path) as f:
-                    for _pkg in file_to_list(f):
-                        packages.append(_pkg)
+    if get_mode == 'paths':
+        paths = get_value_from_config('packages','paths')
+        for path, val in paths.items():
+            if path == 'files':
+                for line in val:
+                    _file_path = get_path_from_txt(line)
+                    #TODO kimpaller: catch and report test as fail incase file cannot be found.
+                    with open(_file_path) as f:
+                        for _pkg in file_to_list(f):
+                            packages.append(_pkg)
+    elif get_mode == 'name':
+        packages = get_value_from_config('packages','names')
     return packages
 
 def get_built_libs():
