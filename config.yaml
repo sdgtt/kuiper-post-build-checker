@@ -49,6 +49,10 @@ libraries:
   default:
     - libiio
     - libosc
+  lib_dir:
+    - /opt/glog
+    - /opt/protobuf
+    - /opt/websockets
 
 devices:
   target:
