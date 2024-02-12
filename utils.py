@@ -194,11 +194,19 @@ def get_commands():
                     commands.append(_c)
     return commands
 
-def get_device_info(carrier, daughter):
+def get_device_info(carrier="", daughter="", tof=False):
     dev = {}
-    dev = get_value_from_config(
-            'devices', 'profiles',
-            carrier, daughter)
+    if tof:
+        dev = get_value_from_config(
+            'devices', 'tof')
+    else:
+        if carrier == "" or daughter == "":
+            raise TypeError("get_device_info() missing some \
+                            required positional arguments: \
+                            'carrier' and 'daughter'")
+        dev = get_value_from_config(
+                'devices', 'profiles',
+                carrier, daughter)
     return dev
 
 def get_artifactory_boot_files(artifactory_path):

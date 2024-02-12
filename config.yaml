@@ -183,6 +183,9 @@ devices:
           - cf-ad9361-dds-core-B
           - cf-ad9361-A (buffer capable)
           - cf-ad9361-B
+  tof:
+    - video0
+    - video1   
 
 
 
