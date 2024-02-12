@@ -16,6 +16,19 @@ packages:
       - stage4/00-install-packages/02-packages
       - stage5/00-install-extras/00-packages
       - stage6/01-install-packages/00-packages
+  names:
+    - libv4l-0
+    - libopencv-dev
+    - cmake
+    - glog
+    - libwebsockets-dev
+    - protobuf
+    - protobuf-compiler
+    - python3-pip
+    - python3-tk
+    - python3-dev
+    - libvncserver1
+
 
 services:
   default:
@@ -36,6 +49,10 @@ libraries:
   default:
     - libiio
     - libosc
+  lib_dir:
+    - /opt/glog
+    - /opt/protobuf
+    - /opt/websockets
 
 devices:
   target:
@@ -183,6 +200,9 @@ devices:
           - cf-ad9361-dds-core-B
           - cf-ad9361-A (buffer capable)
           - cf-ad9361-B
+  tof:
+    - video0
+    - video1   
 
 
 
