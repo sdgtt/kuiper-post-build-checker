@@ -224,11 +224,14 @@ def test_artifactory_boot_files(artifactory_bts):
 
         print(f"base_path: {base_path} ")
         # find descriptor
+        descriptor_avail = False
         for abt in artifactory_bts:
             nbt = '/boot' + str(abt).replace(str(base_path),'')
             if nbt == DESRIPTOR_FILE:
                 descriptor = abt
+                descriptor_avail = True
             normalized_abts.append(nbt)
+        assert descriptor_avail
         #get boot files from descriptor
         bts = get_boot_files(host=None, descriptor=str(descriptor))
 
@@ -245,13 +248,16 @@ def test_artifactory_boot_files(artifactory_bts):
         # check for unexpected files not defined on the descriptor
         bts_from_descriptor = [ bt[1] for bt in bts ]
         for nbt in normalized_abts:
-            condition = (nbt in bts_from_descriptor)
-            message = 'Undefined file: {}'.format(nbt)
-            check.is_true(condition, message)
-            if condition:
-                print(f'Found {nbt}')
-            else:
-                fail_flag = True
+            for file in DEFAULT_FILES:
+                default_file = (file in normalized_abts)
+            if not default_file:
+                condition = (nbt in bts_from_descriptor)
+                message = 'Undefined file: {}'.format(nbt)
+                check.is_true(condition, message)
+                if condition:
+                    print(f'Found {nbt}')
+                else:
+                    fail_flag = True
 
         # check for missing default files
         for file in DEFAULT_FILES:
