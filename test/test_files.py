@@ -231,6 +231,10 @@ def test_artifactory_boot_files(artifactory_bts):
                 descriptor = abt
                 descriptor_avail = True
             normalized_abts.append(nbt)
+        if descriptor_avail:
+            print(f'Found {abt}')
+        else:
+            print(f'Missing {abt}')
         assert descriptor_avail
         #get boot files from descriptor
         bts = get_boot_files(host=None, descriptor=str(descriptor))
