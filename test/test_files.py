@@ -7,9 +7,9 @@ import os
 import re
 from functools import partial
 
-DESRIPTOR_FILE="/boot/kuiper.json"
+DESCRIPTOR_FILE="/boot/kuiper.json"
 DEFAULT_FILES = ["/boot/README.txt", "/boot/VERSION.txt", "/boot/kuiper.json", "/boot/uEnv.txt"]
-# DESRIPTOR_FILE="/boot/projects_descriptor.json"
+# DESCRIPTOR_FILE="/boot/projects_descriptor.json"
 
 def get_project_details(pcn):
     '''Returns project details as a function of pcn: project common name.
@@ -142,7 +142,7 @@ def project_filter(project_dict, filters):
                 break
     return match
 
-def get_boot_files(host, descriptor=DESRIPTOR_FILE, project=None):
+def get_boot_files(host, descriptor=DESCRIPTOR_FILE, project=None):
     ''' Returns a list of files defined on the descriptor file '''
     descriptor_dict = dict()
     boot_files = list()
@@ -201,7 +201,7 @@ def test_bashrc_file(host):
 
 def test_boot_files(host, project_name):
     fail_flag = False
-    bts = get_boot_files(host, DESRIPTOR_FILE, project_name)
+    bts = get_boot_files(host, DESCRIPTOR_FILE, project_name)
     for bt in bts:
         condition = host.file(bt[1]).exists
         message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
@@ -227,14 +227,14 @@ def test_artifactory_boot_files(artifactory_bts):
         descriptor_avail = False
         for abt in artifactory_bts:
             nbt = '/boot' + str(abt).replace(str(base_path),'')
-            if nbt == DESRIPTOR_FILE:
+            if nbt == DESCRIPTOR_FILE:
                 descriptor = abt
                 descriptor_avail = True
             normalized_abts.append(nbt)
         if descriptor_avail:
-            print(f'Found {abt}')
+            print(f'Found {DESCRIPTOR_FILE}')
         else:
-            print(f'Missing {abt}')
+            print(f'FAILURE: Missing {DESCRIPTOR_FILE}')
         assert descriptor_avail
         #get boot files from descriptor
         bts = get_boot_files(host=None, descriptor=str(descriptor))
