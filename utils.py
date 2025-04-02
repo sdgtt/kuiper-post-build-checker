@@ -201,13 +201,31 @@ def get_device_info(carrier, daughter):
             carrier, daughter)
     return dev
 
+def check_for_file_only(file):
+    special_files = ["zImage", "uImage", "Image"]
+    ignored_files = ["bootgen_sysfiles.tgz", "make_parameters.txt"] 
+    if '.' in file:
+        for i in ignored_files:
+            if i in file:
+                return False
+        return True
+    else:
+        for i in special_files:
+            if i in file:
+                return True
+    return False
+
 def get_artifactory_boot_files(artifactory_path):
     # path = ArtifactoryPath("https://<artifactory_server>/<path to parent folder>")
-    path = ArtifactoryPath(artifactory_path)
-    builds = [ p for p in path.glob("*")]
-    latest_path = ArtifactoryPath(builds[-1])
+    if re.search(r'20[12]\d_[0-3]\d_[0-3]\d-\d{2}_\d{2}_\d{2}', artifactory_path):
+        latest_path = ArtifactoryPath(artifactory_path)
+    else:
+        path = ArtifactoryPath(artifactory_path)
+        builds = [ p for p in path.glob("*")]
+        latest_path = ArtifactoryPath(builds[-1])
     latest_path_files = list()
     for f in latest_path.rglob("*"):
-        print(f"Detected {f}")
-        latest_path_files.append(f)
-    return latest_path_files
+        if check_for_file_only(f.name):
+            latest_path_files.append(f)
+            print(f"Detected {f}")
+    return  latest_path_files

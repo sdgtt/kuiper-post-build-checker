@@ -7,8 +7,9 @@ import os
 import re
 from functools import partial
 
-DESRIPTOR_FILE="/boot/kuiper.json"
-# DESRIPTOR_FILE="/boot/projects_descriptor.json"
+DESCRIPTOR_FILE="/boot/kuiper.json"
+DEFAULT_FILES = ["/boot/README.txt", "/boot/VERSION.txt", "/boot/kuiper.json", "/boot/uEnv.txt"]
+# DESCRIPTOR_FILE="/boot/projects_descriptor.json"
 
 def get_project_details(pcn):
     '''Returns project details as a function of pcn: project common name.
@@ -141,7 +142,7 @@ def project_filter(project_dict, filters):
                 break
     return match
 
-def get_boot_files(host, descriptor=DESRIPTOR_FILE, project=None):
+def get_boot_files(host, descriptor=DESCRIPTOR_FILE, project=None):
     ''' Returns a list of files defined on the descriptor file '''
     descriptor_dict = dict()
     boot_files = list()
@@ -200,7 +201,7 @@ def test_bashrc_file(host):
 
 def test_boot_files(host, project_name):
     fail_flag = False
-    bts = get_boot_files(host, DESRIPTOR_FILE, project_name)
+    bts = get_boot_files(host, DESCRIPTOR_FILE, project_name)
     for bt in bts:
         condition = host.file(bt[1]).exists
         message = 'Missing File: Project:{} File:{}'.format(bt[0],bt[1])
@@ -223,11 +224,18 @@ def test_artifactory_boot_files(artifactory_bts):
 
         print(f"base_path: {base_path} ")
         # find descriptor
+        descriptor_avail = False
         for abt in artifactory_bts:
             nbt = '/boot' + str(abt).replace(str(base_path),'')
-            if nbt == DESRIPTOR_FILE:
+            if nbt == DESCRIPTOR_FILE:
                 descriptor = abt
+                descriptor_avail = True
             normalized_abts.append(nbt)
+        if descriptor_avail:
+            print(f'Found {DESCRIPTOR_FILE}')
+        else:
+            print(f'FAILURE: Missing {DESCRIPTOR_FILE}')
+        assert descriptor_avail
         #get boot files from descriptor
         bts = get_boot_files(host=None, descriptor=str(descriptor))
 
@@ -244,11 +252,24 @@ def test_artifactory_boot_files(artifactory_bts):
         # check for unexpected files not defined on the descriptor
         bts_from_descriptor = [ bt[1] for bt in bts ]
         for nbt in normalized_abts:
-            condition = (nbt in bts_from_descriptor)
-            message = 'Undefined file: {}'.format(nbt)
+            for file in DEFAULT_FILES:
+                default_file = (file in normalized_abts)
+            if not default_file:
+                condition = (nbt in bts_from_descriptor)
+                message = 'Undefined file: {}'.format(nbt)
+                check.is_true(condition, message)
+                if condition:
+                    print(f'Found {nbt}')
+                else:
+                    fail_flag = True
+
+        # check for missing default files
+        for file in DEFAULT_FILES:
+            condition = (file in normalized_abts)
+            message = 'Missing default file: {}'.format(file)
             check.is_true(condition, message)
             if condition:
-                print(f'Found {nbt}')
+                print(f'Found {file}')
             else:
                 fail_flag = True
 
