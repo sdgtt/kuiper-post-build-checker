@@ -109,29 +109,44 @@ def fetch_files(config=None, tree=None):
         git_branch = data.get("repo").get("branch")
         git_repo_dir = os.path.join(
             get_package_path(), '..', OS_GEN_REPO_NAME)
+    # always clone the repo to ensure we have the latest version
+    print("Cloning from {} to {}".format(git_uri, git_repo_dir))
+    git.Repo.clone_from(
+        git_uri,
+        git_repo_dir,
+        branch=git_branch,
+        depth=1
+    )
+    print("Repo {} has been cloned from {} branch {}"\
+        .format(git_repo_dir, git_uri, git_branch))
 
-    try:
-        # use existing repo and update for any changes from remote using pull
-        print("Updating repo {}".format(git_repo_dir))
-        g = git.Repo(git_repo_dir).git
-        if not tree:
-            tree = g.log(pretty="format:%H",n=1)
-        g.checkout(tree)
-        print("Checkout to {}".format(tree))   
-        status = g.pull('origin',tree)
-        print("Repo {} status: {}".format(git_repo_dir, status))
-    except(git.exc.NoSuchPathError, git.exc.InvalidGitRepositoryError) as exc:
-        # create a new repo by cloning remote
-        print(str(exc))
-        print("Cloning from {} to {}".format(git_uri, git_repo_dir))
-        g = git.Git(os.path.join(get_package_path(), '..'))
-        g.clone(git_uri)
-        print("Repo {} has been cloned from {} branch {}"\
-            .format(git_repo_dir, git_uri, git_branch))
-        if tree:
-            g = git.Repo(git_repo_dir).git
-            status = g.checkout(tree)
-            print("Checkout to {}".format(tree))
+    # try:
+    #     # use existing repo and update for any changes from remote using pull
+    #     print("Updating repo {}".format(git_repo_dir))
+    #     print("Branch: {}".format(git_branch))
+    #     g = git.Repo(git_repo_dir).git
+    #     if not tree:
+    #         tree = g.log(pretty="format:%H",n=1)
+    #     g.checkout(tree)
+    #     print("Checkout to {}".format(tree))   
+    #     status = g.pull('origin',tree)
+    #     print("Repo {} status: {}".format(git_repo_dir, status))
+    # except(git.exc.NoSuchPathError, git.exc.InvalidGitRepositoryError) as exc:
+    #     # create a new repo by cloning remote
+    #     print(str(exc))
+    #     print("Cloning from {} to {}".format(git_uri, git_repo_dir))
+    #     git.Repo.clone_from(
+    #         git_uri,
+    #         git_repo_dir,
+    #         branch=git_branch,
+    #         depth=1
+    #     )
+    #     print("Repo {} has been cloned from {} branch {}"\
+    #         .format(git_repo_dir, git_uri, git_branch))
+    #     if tree:
+    #         g = git.Repo(git_repo_dir).git
+    #         status = g.checkout(tree)
+    #         print("Checkout to {}".format(tree))
 
 def get_host(backend='paramiko',username='analog', password='analog',host=None, ip=None):
     if host:
