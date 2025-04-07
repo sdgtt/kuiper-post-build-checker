@@ -30,6 +30,12 @@ def pytest_addoption(parser):
         help="Common project name of the board. ex: socfpga_arria10_socdk_daq2"
     )
     
+    parser.addoption(
+        "--kuiper",
+        action="store_true",
+        help="Run tests related to Kuiper such as packages and shell commands",
+    )
+
 @pytest.fixture
 def host(request):
     # if host is given, ip and config will be ignored

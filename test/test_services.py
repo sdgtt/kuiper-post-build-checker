@@ -1,6 +1,7 @@
 import pytest
 import utils
 
+@pytest.mark.kuiper
 @pytest.mark.parametrize("name", utils.get_services())
 def test_services(host, name):
     service = host.service(name)

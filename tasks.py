@@ -43,13 +43,13 @@ def test(
         target = target + ' {}'.format(_file)
 
     if host:
-        options = options + ' --host={}'.format(host)
+        options = options + '-m kuiper --host={}'.format(host)
     
     if ip:
-        options = options + ' --ip={}'.format(ip)
+        options = options + '-m kuiper --ip={}'.format(ip)
 
     if hardware_less:
-        options = options + ' -m "not hardware_check"'
+        options = options + '-m kuiper -m "not hardware_check"'
 
     if artifactory_target:
         options = options + ' -m "artifactory_check" --artifactory_target={}'\
