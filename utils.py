@@ -110,10 +110,13 @@ def fetch_files(config=None, tree=None):
         git_branch = data.get("repo").get("branch")
         git_repo_dir = os.path.join(
             get_package_path(), '..', OS_GEN_REPO_NAME)
-    # always clone the repo to ensure we have the latest version
+    if tree:
+        git_branch = tree
+    # check if the directory already exists
     if os.path.exists(git_repo_dir):
         print(f"Deleting existing directory: {git_repo_dir}")
         shutil.rmtree(git_repo_dir)
+    # always clone the repo to ensure we have the latest version
     print("Cloning from {} to {}".format(git_uri, git_repo_dir))
     git.Repo.clone_from(
         git_uri,

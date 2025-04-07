@@ -1,11 +1,13 @@
 # This config file stores necessary test and other configuration parameters
+# This config file is applicable only to the previous Kuiper version thus the branch is set to main_old
+# The new Kuiper version uses a different config file and the branch is set to main
 ---
 testinfra:
   host: "paramiko://analog:analog@localhost"
 
 repo:
   uri:  https://github.com/analogdevicesinc/adi-kuiper-gen.git
-  branch: main-old
+  branch: main_old
 
 packages:
   paths:
