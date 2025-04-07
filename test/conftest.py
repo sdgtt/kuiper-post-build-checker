@@ -29,7 +29,7 @@ def pytest_addoption(parser):
         default=None,
         help="Common project name of the board. ex: socfpga_arria10_socdk_daq2"
     )
-    
+
 @pytest.fixture
 def host(request):
     # if host is given, ip and config will be ignored
