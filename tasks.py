@@ -29,9 +29,8 @@ def test(
         artifactory_target=None
     ):
     """ Run pytest tests """
-    if not artifactory_target:
-        # update adi kuiper gen repo
-        utils.fetch_files(tree=tree)
+    # update adi kuiper gen repo
+    utils.fetch_files(tree=tree)
 
     # build command based on parameters
     target = ''
