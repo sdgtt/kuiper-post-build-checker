@@ -29,33 +29,7 @@ def pytest_addoption(parser):
         default=None,
         help="Common project name of the board. ex: socfpga_arria10_socdk_daq2"
     )
-    
-    parser.addoption(
-        "--kuiper",
-        action="store_true",
-        help="Run tests related to Kuiper such as packages and shell commands",
-    )
 
-def pytest_runtest_setup(item):
-    target = item.config.getoption("artifactory_target")
-    if target and not item.get_closest_marker("artifactory_check"):
-        pytest.skip("Skipping non-artifactory_check test because --artifactory-target is used")
-
-
-def pytest_collection_modifyitems(config, items):
-    target = config.getoption("artifactory_target")
-    if target:
-        selected = []
-        deselected = []
-        for item in items:
-            if item.get_closest_marker("artifactory_check"):
-                selected.append(item)
-            else:
-                deselected.append(item)
-        items[:] = selected
-        config.hook.pytest_deselected(items=deselected)
-
-        
 @pytest.fixture
 def host(request):
     # if host is given, ip and config will be ignored
