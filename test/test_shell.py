@@ -60,11 +60,6 @@ def test_iio_info_device(host, target_info):
         assert target in out.stdout
 
 @utils.timeout()
-@pytest.mark.skipif(
-    not pytest.config.getoption("-m") == "kuiper",
-    reason="Skipping because the 'kuiper' marker is not passed"
-)
-@pytest.mark.kuiper
 @pytest.mark.parametrize("lib", utils.get_built_libs())
 def test_libs(host, lib):
     command = '/usr/sbin/ldconfig -v 2> /dev/null | grep {}'.format(lib)

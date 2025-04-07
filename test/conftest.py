@@ -36,6 +36,11 @@ def pytest_addoption(parser):
         help="Run tests related to Kuiper such as packages and shell commands",
     )
 
+def pytest_runtest_setup(item):
+    target = item.config.getoption("artifactory_target")
+    if target and not item.get_closest_marker("artifactory_check"):
+        pytest.skip("Skipping non-artifactory_check test because --artifactory-target is used")
+
 @pytest.fixture
 def host(request):
     # if host is given, ip and config will be ignored
