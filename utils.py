@@ -151,37 +151,39 @@ def get_services():
     services = get_value_from_config('services','default')
     return services
 
-def get_packages():
+def get_packages(get_mode = 'paths'):
     packages = []
     # read config file
-    paths = get_value_from_config('packages','paths')
-    for path, val in paths.items():
-        if path == 'files':
-            for line in val:
-                _file_path = get_path_from_txt(line)
-                #TODO kimpaller: catch and report test as fail incase file cannot be found.
-                with open(_file_path) as f:
-                    for _pkg in file_to_list(f):
-                        packages.append(_pkg)
-    return packages
-
-def get_built_libs():
-    libs = []
-    libraries = get_value_from_config('libraries')
-    for cat, cat_data in libraries.items():
-        if cat == 'paths':
-            files = cat_data.get('files')
-            if isinstance(files,list):
-                for line in files:
+    if get_mode == 'paths':
+        paths = get_value_from_config('packages','paths')
+        for path, val in paths.items():
+            if path == 'files':
+                for line in val:
                     _file_path = get_path_from_txt(line)
                     #TODO kimpaller: catch and report test as fail incase file cannot be found.
                     with open(_file_path) as f:
-                        for _lib in file_to_list(f, 'libs'):
-                            libs.append(_lib)                    
-        if cat =='default':
-            if isinstance(cat_data,list):
-                for _lib in cat_data:
-                    libs.append(_lib)
+                        for _pkg in file_to_list(f):
+                            packages.append(_pkg)
+    elif get_mode == 'name':
+        packages = get_value_from_config('packages','names')
+    return packages
+
+def get_built_libs(get_mode='paths'):
+    libs = []
+    if get_mode == 'paths':
+        libraries = get_value_from_config('libraries')
+        for cat, cat_data in libraries.items():
+            if cat == 'paths':
+                files = cat_data.get('files')
+                if isinstance(files,list):
+                    for line in files:
+                        _file_path = get_path_from_txt(line)
+                        #TODO kimpaller: catch and report test as fail incase file cannot be found.
+                        with open(_file_path) as f:
+                            for _lib in file_to_list(f, 'libs'):
+                                libs.append(_lib)                    
+    else:
+        libs = get_value_from_config('libraries',get_mode)
     return libs
 
 def get_commands():
@@ -194,11 +196,19 @@ def get_commands():
                     commands.append(_c)
     return commands
 
-def get_device_info(carrier, daughter):
+def get_device_info(carrier="", daughter="", tof=False):
     dev = {}
-    dev = get_value_from_config(
-            'devices', 'profiles',
-            carrier, daughter)
+    if tof:
+        dev = get_value_from_config(
+            'devices', 'tof')
+    else:
+        if carrier == "" or daughter == "":
+            raise TypeError("get_device_info() missing some \
+                            required positional arguments: \
+                            'carrier' and 'daughter'")
+        dev = get_value_from_config(
+                'devices', 'profiles',
+                carrier, daughter)
     return dev
 
 def check_for_file_only(file):
